@@ -130,6 +130,54 @@ int isStringType(sym symbole)
     return 0;
 }
 
+int isConstAFF(sym symbole)
+{
+    int i=0;
+    for(i=0; i<index; i++)
+    {
+        if(strcmp(symbole.nom,TAB_IDFS[i].NOM)== 0)
+        {
+            switch(TAB_IDFS[i].TIDF)
+            {
+            case TSTRING:
+            case TNUM:
+                {
+                    return 0;
+                }
+            case TNULL:
+            case TCONSTNUM:
+            case TCONSTSTRING:
+            default:
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+
+int ig_main_return_type;
+int IDmatchMainReturnType(sym symbole)
+{
+    for(int i=0; i<index; i++)
+    {
+        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
+        {
+            if( (TAB_IDFS[i].TIDF== TCONSTNUM || TAB_IDFS[i].TIDF==TNUM) &&
+               ig_main_return_type== TYNUM_TOKEN)
+                return 1;
+            else if( (TAB_IDFS[i].TIDF== TCONSTSTRING || TAB_IDFS[i].TIDF==TSTRING) &&
+               ig_main_return_type== TYSTRING_TOKEN)
+                return 1;
+        }
+    }
+    return 0;
+}
+
+
+
 int get_adresse(sym id)
 {
     for(int j = 0; j<index; j++)
@@ -230,11 +278,10 @@ void Test_Symbole (int token, int COD_ERR)
         }
         else if(sym_cour.code == STRING_TOKEN)
         {
-            printf("We have the string: %s\n", sym_cour.nom);
             strcpy(gs_value, sym_cour.nom);
         }
 
-      //  printf("Done with nom->%s  code->%s\n", sym_cour.nom, token_names[sym_cour.code]);
+        printf("Done with nom->%s  code->%s\n", sym_cour.nom, token_names[sym_cour.code]);
         do{
             Sym_suiv();
         }while(sym_cour.code == COMM_TOKEN);
@@ -279,7 +326,6 @@ void addID()
     printf("addid: not found.\n");
 }
 
-int ig_main_return_type;
 void MAIN()
 {
     Test_Symbole(MAIN_TOKEN, ERR_MAIN);
@@ -292,12 +338,18 @@ void MAIN()
             case TYNUM_TOKEN:
                 Test_Symbole(TYNUM_TOKEN, ERR_TYNUM);
                 Test_Symbole(ID_TOKEN, ERR_ID);
-                addID();
+                if(!ExistInTab(sym_IDprec))
+                    addID();
+                else
+                    Erreur_sem(double_dec);
                 break;
             case TYSTRING_TOKEN:
                 Test_Symbole(TYSTRING_TOKEN, ERR_TYSTRING);
                 Test_Symbole(ID_TOKEN, ERR_ID);
-                addID();
+                if(!ExistInTab(sym_IDprec))
+                    addID();
+                else
+                    Erreur_sem(double_dec);
                 break;
             default:
                 break;
@@ -331,7 +383,6 @@ void MAIN()
     Test_Symbole(AO_TOKEN, ERR_AO);
     DECLARE();
     INSTS();
-    generer1(HLT);
     Test_Symbole(AF_TOKEN, ERR_AF);
 
     printf("\n    ###########################################################\n");
@@ -342,7 +393,7 @@ void MAIN()
     printf("                       ##################\n");
     printf("                       #      DONE      #\n");
     printf("                       ##################\n");
-   /*printf("\nPress Enter to print the generated P-Code.");
+    /*printf("\nPress Enter to print the generated P-Code.");
     getchar();
     print_code();
     printf("\n\n");
@@ -362,7 +413,6 @@ void DECLARE()
      CONSTS();
      NUMERIC();
      STRINGS();
-    generer2(INT, offset);
 }
 
 void CONSTS()
@@ -389,7 +439,10 @@ void CONSTS()
                     Erreur(ERR);
             }
             Test_Symbole(ID_TOKEN,ERR_ID);
-            addID();
+            if(!ExistInTab(sym_IDprec))
+                addID();
+            else
+                Erreur_sem(double_dec);
             Test_Symbole(AFF_TOKEN,ERR_AFF);
             if(typeID==TYNUM_TOKEN)
             {
@@ -421,7 +474,10 @@ void CONSTS()
                         Erreur(ERR);
                 }
                 Test_Symbole(ID_TOKEN,ERR_ID);
-                addID();
+                if(!ExistInTab(sym_IDprec))
+                    addID();
+                else
+                    Erreur_sem(double_dec);
                 Test_Symbole(AFF_TOKEN,ERR_AFF);
                 if(typeID==TYNUM_TOKEN)
                 {
@@ -439,7 +495,6 @@ void CONSTS()
 
             }
             Test_Symbole(PV_TOKEN,ERR_PV);
-            generer1(STO);
             gi_isCst=0;
         }
         case TYNUM_TOKEN:
@@ -461,14 +516,20 @@ void NUMERIC()
             {
                 Test_Symbole(TYNUM_TOKEN,ERR_TYNUM);
                 Test_Symbole(ID_TOKEN,ERR_ID);
-                addID();
+                if(!ExistInTab(sym_IDprec))
+                    addID();
+                else
+                    Erreur_sem(double_dec);
                 offset++;
 
                 while(sym_cour.code == VIR_TOKEN)
                 {
                     Test_Symbole(VIR_TOKEN, ERR_VIR);
                     Test_Symbole(ID_TOKEN,ERR_ID);
-                    addID();
+                    if(!ExistInTab(sym_IDprec))
+                        addID();
+                    else
+                        Erreur_sem(double_dec);
                     offset++;
                 }
                 Test_Symbole(PV_TOKEN,ERR_PV);
@@ -483,7 +544,6 @@ void NUMERIC()
         default:
             Erreur(ERR_TYNUM);
     }
-
 }
 
 void STRINGS()
@@ -494,14 +554,20 @@ void STRINGS()
         {
             Test_Symbole(TYSTRING_TOKEN,ERR_TYSTRING);
             Test_Symbole(ID_TOKEN,ERR_ID);
-            addID();
+            if(!ExistInTab(sym_IDprec))
+                addID();
+            else
+                Erreur_sem(double_dec);
             offset++;
 
             while(sym_cour.code == VIR_TOKEN)
             {
                 Test_Symbole(VIR_TOKEN, ERR_VIR);
                 Test_Symbole(ID_TOKEN,ERR_ID);
-                addID();
+                if(!ExistInTab(sym_IDprec))
+                    addID();
+                else
+                    Erreur_sem(double_dec);
                 offset++;
             }
             Test_Symbole(PV_TOKEN,ERR_PV);
@@ -532,19 +598,47 @@ void INSTS()
     }
     Test_Symbole(RETURN_TOKEN,ERR_RETURN);
     if(sym_cour.code == ID_TOKEN){
-        printf("\nFunction returned: %s = value\n", sym_cour.nom); //check if retour type is same as id
+        if(!ExistInTab(sym_IDprec))
+            Erreur_sem(not_declared);
+        if(!IDmatchMainReturnType(sym_cour))
+            Erreur_sem(return_type);
+        printf("\nFunction returned: %s = value\n", sym_cour.nom);
         Sym_suiv();
     }
     else if(sym_cour.code == NUM_TOKEN){
-        printf("\nFunction returned %s.\n", sym_cour.nom);
-        Sym_suiv();
+        if(ig_main_return_type== TYNUM_TOKEN)
+        {
+            printf("\nFunction returned %s.\n", sym_cour.nom);
+            Sym_suiv();
+        }
+        else
+            Erreur_sem(return_type);
+    }
+    else if(sym_cour.code == STRING_TOKEN){
+        if(ig_main_return_type== TYSTRING_TOKEN)
+        {
+            printf("\nFunction returned %s.\n", sym_cour.nom);
+            Sym_suiv();
+        }
+        else
+            Erreur_sem(return_type);
     }
     else if(sym_cour.code == NULL_TOKEN){
-        printf("\nFunction returned null.\n");
-        Sym_suiv();
+        if(ig_main_return_type== NULL_TOKEN)
+        {
+            printf("\nFunction returned null.\n");
+            Sym_suiv();
+        }
+        else
+            Erreur_sem(return_type);
     }
     else if(sym_cour.code == PV_TOKEN){
-        printf("\nFunction returned null.\n");
+        if(ig_main_return_type== NULL_TOKEN)
+        {
+            printf("\nFunction returned null.\n");
+        }
+        else
+            Erreur_sem(return_type);
     }
     Test_Symbole(PV_TOKEN, ERR_PV);
 }
@@ -598,19 +692,25 @@ void ELIF()
 void AFFECT()
 {
     Test_Symbole(ID_TOKEN, ERR_ID);
+    if(!ExistInTab(sym_IDprec))
+        Erreur_sem(not_declared);
+    if(isConstAFF(sym_IDprec))
+        Erreur_sem(const_aff);
+
     sym symbole = sym_IDprec;
     Test_Symbole(AFF_TOKEN, ERR_AFF);
-    if(sym_cour.code == STRING_TOKEN)
+    if(isStringType(sym_IDprec))
     {
         CONCAT();
-        ajouter_val(gs_value, sym_IDprec);
+        ajouter_val(gs_value, symbole);
     }
-    else
+    else if(isNumericType(sym_IDprec))
     {
         EXPR();
         ajouter_i_val(gi_value, symbole);
     }
-
+    else
+        Erreur_sem(op_num_string);
 }
 
 
@@ -788,23 +888,56 @@ void EXPR()
 
 void CONCAT()
 {
-    /** string + string **/
+    /** words  + words **/
     int op;
     char phrase1[100];
-    Test_Symbole(STRING_TOKEN, ERR_STRING);
+    //Test_Symbole(STRING_TOKEN, ERR_STRING);
+    WORDS();
     strcpy(phrase1, gs_value);
     while(sym_cour.code == PLUS_TOKEN)
     {
-        op = sym_cour.code;
         Sym_suiv();
-        Test_Symbole(STRING_TOKEN, ERR_STRING);
-        op = CCT;
+        //Test_Symbole(STRING_TOKEN, ERR_STRING);
+        WORDS();
         strcat(phrase1, gs_value);
     }
-    generer1(op);
     strcpy(gs_value, phrase1);
 }
 
+void get_value_id(sym symbole)
+{
+    for(int i=0; i<index; i++)
+    {
+        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
+        {
+            if(TAB_IDFS[i].TIDF == TCONSTSTRING || TAB_IDFS[i].TIDF == TSTRING)
+                strcpy(gs_value,TAB_IDFS[i].value);
+        }
+    }
+}
+void WORDS()
+{
+    switch(sym_cour.code)
+    {
+        case ID_TOKEN:
+            {
+                Test_Symbole(ID_TOKEN, ERR_ID);
+                if(!ExistInTab(sym_IDprec))
+                    Erreur_sem(not_declared);
+                if(!isStringType(sym_IDprec))
+                    Erreur_sem(op_num_string);
+                get_value_id(sym_IDprec);
+                break;
+            }
+        case STRING_TOKEN:
+            {
+                Test_Symbole(STRING_TOKEN, ERR_STRING);
+                break;
+            }
+        default:
+            Erreur(ERR);
+    }
+}
 
 void TERM()
 {
@@ -843,13 +976,14 @@ void TERM()
     set_i_value(valeur);
 }
 
-void get_i_value_id()
+void get_i_value_id(sym symbole)
 {
     for(int i=0; i<index; i++)
     {
-        if(strcmp(sym_cour.nom, TAB_IDFS[i].NOM)==0)
+        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
         {
-            gi_value = TAB_IDFS[i].i_value;
+            if(TAB_IDFS[i].TIDF == TCONSTNUM || TAB_IDFS[i].TIDF == TNUM)
+                set_i_value(TAB_IDFS[i].i_value);
         }
     }
 }
@@ -861,28 +995,16 @@ void FACT()
         case ID_TOKEN:
             {
                 Test_Symbole(ID_TOKEN, ERR_ID);
-                /*if(!ExistInTab(sym_prec))
+                if(!ExistInTab(sym_IDprec))
                     Erreur_sem(not_declared);
-                if(isProgId(sym_prec))
-                    Erreur_sem(prog_id);
-
-                int id_addr = get_adresse(sym_prec);
-                if(id_addr == -1)
-                {
-                    printf("\n### Error while generating code: Couldn't find id. ###\n");
-                    exit(EXIT_FAILURE);
-                }
-                generer2(LDA, id_addr);
-                generer1(LDV);*/
-
-                get_i_value_id();
-                printf("i_value of %s is %f.\n", sym_IDprec.nom, gi_value);
+                if(!isNumericType(sym_IDprec))
+                    Erreur_sem(op_num_string);
+                get_i_value_id(sym_IDprec);
                 break;
             }
         case NUM_TOKEN:
             {
                 Test_Symbole(NUM_TOKEN, ERR_NUM);
-                generer2(LDI, gi_value);
                 break;
             }
         case PO_TOKEN:
@@ -902,14 +1024,13 @@ void FOR()
 {
     Test_Symbole(FOR_TOKEN, ERR_FOR);
     Test_Symbole(ID_TOKEN, ERR_ID);
-    /*if(!ExistInTab(sym_prec))
+    if(!ExistInTab(sym_IDprec))
         Erreur_sem(not_declared);
-    int err = isVar(sym_prec);
-    if(err ==0)
-            Erreur_sem(const_aff);
-    else if(err == -1)
-            Erreur_sem(prog_id);
-*/
+    if(isConstAFF(sym_IDprec))
+        Erreur_sem(const_aff);
+    if(!isNumericType(sym_IDprec))
+        Erreur_sem(op_num_string);
+
     Test_Symbole(IN_TOKEN, ERR_IN);
     Test_Symbole(NUM_TOKEN, ERR_NUM);
     Test_Symbole(DPT_TOKEN, ERR_DPT);
@@ -937,42 +1058,19 @@ void SCAN()
      Test_Symbole(SCAN_TOKEN, ERR_SCAN);
      Test_Symbole(PO_TOKEN, ERR_PO);
      Test_Symbole(ID_TOKEN, ERR_ID);
-     /*if(!ExistInTab(sym_prec))
+     if(!ExistInTab(sym_IDprec))
         Erreur_sem(not_declared);
-     int err = isVar(sym_prec);
-     if(err ==0)
+     if(isConstAFF(sym_IDprec))
         Erreur_sem(const_aff);
-     else if(err == -1)
-        Erreur_sem(prog_id);
 
-     int id_addr = get_adresse(sym_prec);
-     if(id_addr == -1)
+     while(sym_cour.code== VIR_TOKEN)
      {
-         printf("\n### Error while generating code: Couldn't find id. ###\n");
-         exit(EXIT_FAILURE);
-     }
-     generer2(LDA, id_addr);*/
-     generer1(INN);
-
-     while(sym_cour.code== VIR_TOKEN){
         Test_Symbole(VIR_TOKEN, ERR_VIR);
         Test_Symbole(ID_TOKEN, ERR_ID);
-       /* if(!ExistInTab(sym_prec))
+        if(!ExistInTab(sym_IDprec))
             Erreur_sem(not_declared);
-        int err = isVar(sym_prec);
-        if(err ==0)
-                Erreur_sem(const_aff);
-        else if(err == -1)
-                Erreur_sem(prog_id);
-
-        int id_addr = get_adresse(sym_prec);
-        if(id_addr == -1)
-        {
-            printf("\n### Error while generating code: Couldn't find id. ###\n");
-            exit(EXIT_FAILURE);
-        }
-        generer2(LDA, id_addr);
-        generer1(INN);*/
+        if(isConstAFF(sym_IDprec))
+            Erreur_sem(const_aff);
      }
      Test_Symbole(PF_TOKEN, ERR_PF);
      if(sym_cour.code != PV_TOKEN)
@@ -987,43 +1085,16 @@ void PRINT()
         CONCAT();
      else
         EXPR();
-     /*if(!ExistInTab(sym_prec))
-        Erreur_sem(not_declared);
-
-     int id_addr = get_adresse(sym_prec);
-     if(id_addr == -1)
-     {
-         printf("\n### Error while generating code: Couldn't find id. ###\n");
-         exit(EXIT_FAILURE);
-     }
-     generer2(LDA, id_addr);
-     generer1(LDV);
-     generer1(PRN);*/
 
      while(sym_cour.code== VIR_TOKEN){
         Test_Symbole(VIR_TOKEN, ERR_VIR);
-        if(sym_cour.code == STRING_TOKEN)
+        if(sym_cour.code == STRING_TOKEN || isStringType(sym_cour))
             CONCAT();
          else
             EXPR();
-        /*if(!ExistInTab(sym_prec))
-            Erreur_sem(not_declared);
-        if(isProgId(sym_prec))
-            Erreur_sem(prog_id);
-
-        int id_addr = get_adresse(sym_prec);
-         if(id_addr == -1)
-         {
-             printf("\n### Error while generating code: Couldn't find id. ###\n");
-             exit(EXIT_FAILURE);
-         }
-         generer2(LDA, id_addr);
-         generer1(LDV);
-         generer1(PRN);*/
      }
      Test_Symbole(PF_TOKEN, ERR_PF);
      if(sym_cour.code != PV_TOKEN)
         Erreur(ERR_PV);
 }
-
 
