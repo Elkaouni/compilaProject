@@ -310,5 +310,3 @@ Token *Symb_suiv(Token *token)
 	}
 	};
 }
-
-
