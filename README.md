@@ -123,12 +123,16 @@ ID = EXPR() | CONCAT() ;
 ```
 #### CONCAT 
 ```
-STRING + STRING ;
+WORDS() + WORDS() ;
+```
+#### WORDS 
+```
+ID | STRING 
 ```
 #### IF 
 ```
 If ( COND() ) { INST() ; }
-[ else { INST () ; } |ELIF() ]
+[ else { INST () ; } | ELIF() ]
 ```
 #### ELIF()
 ```
