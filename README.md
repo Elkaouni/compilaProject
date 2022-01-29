@@ -1,4 +1,4 @@
-# compilaProject
+# Projet Compilation S3
 (lexer and parser done. Next is semantic analysis and code generator.)
 Dans le cadre du projet de compilation de S3, nous avons décider de proposer un nouveau language inspiré de Pascal, C et Java. C'est un language assez simple vue le temps alloué au projet. Ci-dessous notre grammaire.
 
