@@ -1,13 +1,11 @@
 /*exemple 1*/
-main():NULL{
-    /*this is
-    a comment.*/
-    const num x=2, string y="hi ";
-    num z;
+main(num number):NULL{
+    /*this is a comment*/
+    const num x=2, string titi="hihi";
+    num toto;
+    string y;
     begin
-        scan(z);
-        x=x+z;
-        print(y,x);
+        x=11%2;
+        print("this is "+"exemple ", 1);
     return;
 }
-
