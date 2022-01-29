@@ -62,6 +62,7 @@ enum{
     const_aff,
     div_zero,
     mod_notInt,
+    return_type,
     op_num_string
 }err_sem;
 
