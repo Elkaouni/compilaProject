@@ -10,6 +10,7 @@ void INSTS();
 void INST();
 void AFFECT();
 void CONCAT();
+void WORDS();
 void IF();
 void ELIF();
 void WHILE();
@@ -21,9 +22,3 @@ void COND();
 void EXPR();
 void TERM();
 void FACT();
-
-
-
-
-
-
