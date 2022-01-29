@@ -44,8 +44,8 @@ void Erreur_sem(int cod)
         case div_zero:
             printf("You tried to divide by zero!");
             break;
-        case prog_id:
-            printf("You can't use the program ID.");
+        case op_num_string:
+            printf("You can't add/substract/divide/multiply/modulate a numeric type and a string.");
             break;
     }
     printf(" ###\n");
