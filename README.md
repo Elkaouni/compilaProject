@@ -211,7 +211,7 @@ A|..|Z|a|..|z
 6.	PAS DE DOUBLE DECLARATIONS 
 7.	Apres BEGIN, tous les symboles doivent être déjà déclarés 
 8.	Le traitement doit se faire à l’intérieur de la fonction main.
-9.	Il est nécessaire de préciser le type du retour de la fonction main ; num, string ou NULL. Si la fonction ne retourne rien, utiliser NULL.
+9.	Il est nécessaire de préciser le type du retour de la fonction main ; num, string ou NULL. Si la fonction ne retourne rien, utiliser NULL. Il faut s'assurer que le type valeur retournée corrspond à ce qu'a été précisé au préalable.
 10.	Les commentaires ne doivent pas être interprétés.
 11.	Un commentaire peut être écrit n’importe où.
 12.	On peut pas faire des opérations entre un string et un entier.
