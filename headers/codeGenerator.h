@@ -5,7 +5,7 @@ typedef struct
 } pcode;
 
 typedef enum{
-    ADD, SUB, MUL, DIV, MOD,
+    ADD, SUB, MUL, DIV, MOD, CCT,
     EQL, NEQ, GTR, LSS, GEQ, LEQ,
     PRN,
     INN,
@@ -18,7 +18,7 @@ typedef enum{
     BZE,
     HLT
 } _codeJeu;
-char *code_jeu[]={"ADD", "SUB", "MUL", "DIV","MOD", "EQL",
+char *code_jeu[]={"ADD", "SUB", "MUL", "DIV","MOD", "CCT", "EQL",
                 "NEQ", "GTR", "LSS", "GEQ", "LEQ",
                 "PRN", "INN", "INT", "LDI", "LDA",
                 "LDV", "STO",  "BRN", "BZE", "HLT"
@@ -62,7 +62,10 @@ void genererBZE(int addr_cond, int addr_inst)
 
 void print_code()
 {
-    printf("\n--------Generated Code:--------\n");
+    printf("\n");
+    printf("        ############################\n");
+    printf("        #      Generated Code      #\n");
+    printf("        ############################\n\n");
     for(int i=0; i<PC; i++)
     {
         char *inst= code_jeu[generated_code[i].inst];
@@ -74,10 +77,12 @@ void print_code()
         {
              printf("%d", generated_code[i].val);
         }
-
-        printf("\n");
     }
-    printf("-------END OF Generated Code.-------");
+    printf("\n");
+    printf("        ##################\n");
+    printf("        #      END       #\n");
+    printf("        ##################\n\n");
+
 }
 
 void SaveInstToFile(FILE *file_sortie,int INST, int val)
@@ -90,10 +95,12 @@ void SaveInstToFile(FILE *file_sortie,int INST, int val)
          case BZE: fprintf(file_sortie, "%s \t %d \n", "BZE", val); break;
          case BRN: fprintf(file_sortie, "%s \t %d \n", "BRN", val); break;
          case LDV: fprintf(file_sortie, "%s \n", "LDV"); break;
+         case CCT: fprintf(file_sortie, "%s \n", "CCT"); break;
          case ADD: fprintf(file_sortie, "%s \n", "ADD"); break;
          case SUB: fprintf(file_sortie, "%s \n", "SUB"); break;
          case MUL: fprintf(file_sortie, "%s \n", "MUL"); break;
          case DIV: fprintf(file_sortie, "%s \n", "DIV"); break;
+         case MOD: fprintf(file_sortie, "%s \n", "MOD"); break;
          case LEQ: fprintf(file_sortie, "%s \n", "LEQ"); break;
          case GEQ: fprintf(file_sortie, "%s \n", "GEQ"); break;
          case NEQ: fprintf(file_sortie, "%s \n", "NEQ"); break;
@@ -109,10 +116,10 @@ void SaveInstToFile(FILE *file_sortie,int INST, int val)
      }
  }
 
-
+/* change path according to whre you want to save*/
 void SavePCodeToFile(FILE *file_sortie) {
     int i;
-    char *path = "C:\\Users\\user\\Desktop\\2A Ensias\\S3\\TPs\\TP compila\\compilateur\\compiler\\result.rh";
+    char *path = "C:\\Users\\user\\Desktop\\2A Ensias\\S3\\Projets\\compilateur\\compilateur\\result.rh";
     file_sortie=fopen(path, "w+" );
     if(file_sortie == NULL){
         printf("File not found.\n");
