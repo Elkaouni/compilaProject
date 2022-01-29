@@ -61,7 +61,7 @@ enum{
     double_dec,
     const_aff,
     div_zero,
-    prog_id
+    op_num_string
 }err_sem;
 
 void Erreur(int cod_err);
