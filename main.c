@@ -20,7 +20,6 @@ int tailleList = 0;
 void saveTokenInList(Token* token)
 {
     symbole.code = token->type;
-    //printf("Saving: %s ...\n", token->value);
     strcpy(symbole.nom,token->value);
     list[tailleList]= symbole;
     tailleList++;
@@ -35,22 +34,29 @@ void printList()
 {
     int i;
     for(i=0; i<tailleList; i++){
-            printf(" %s --> %s \t", list[i].nom, token_names[list[i].code]);
-            if(i%4 ==0)
-                printf("\n");
+        printf(" %s --> %s \n", list[i].nom, token_names[list[i].code]);
     }
 }
 
 int main(int argc, char *argv[])
 {
-	char* path = "C:\\Users\\user\\Desktop\\2A Ensias\\S3\\Projets\\compilateur\\compilateur\\tests\\exemple3.rh";
-	/*if (argc != 2)
+	printf("##################################################################################\n");
+	printf("##################  Welcome to the simulation of our compiler.  ##################\n");
+    printf("##################################################################################\n");
+	printf("##                                                                              ##\n");
+    printf("##  Information regarding our grammar is in the report submitted with the code. ##\n");
+    printf("##  We recommend using one of our example files in the test folder.             ##\n");
+	printf("##                                                                              ##\n");
+    printf("##################################################################################\n");
+    printf("\nPress Enter to start the lexical analysis of your inserted file.");
+    getchar();
+	if (argc != 2)
 	{
 		printf("You didn't choose any file. Please try again and don't forget to choose one.\n");
 		exit(1);
-	}*/
+	}
 
-	if ((file = fopen(path, "r")) == NULL)
+	if ((file = fopen(argv[1], "r")) == NULL)
 	{
 		printf("ERROR! Could not open the file.\n");
 		exit(1);
@@ -63,16 +69,26 @@ int main(int argc, char *argv[])
 		//AfficherToken(token);
 		saveTokenInList(token);
 	}
-
 	if(!init_lexer_token_list(list, tailleList))
         exit(0);
 
-    printList();
-    printf("\nStart\n");
+    printf("    ######################################\n");
+    printf("    #            Lexer: Done.            #\n");
+    printf("    ######################################\n\n");
+    //printList();
 
-	premier_sym();
+    printf("\nPress Enter to start launch the PARSER.");
+    getchar();
+    printf("    ######################################################\n");
+    printf("    #  Parser: Starting syntax and semantic analysis...  #\n");
+    printf("    ######################################################\n");
+    premier_sym();
 	MAIN();
 
-	printf("\n\nOfficially done.\n");
+	printf("           ############################### \n");
+    printf("           #  Done analyzing the file.   #\n");
+    printf("           #  Compiler is shutting down  #\n");
+    printf("           ############################### \n");
+
 	return 1;
 }
