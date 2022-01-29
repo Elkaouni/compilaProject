@@ -47,10 +47,19 @@ void Erreur_sem(int cod)
         case mod_notInt:
             printf("Invalid operand %: You have a float!");
             break;
+        case return_type:
+            printf("The return type doesn't match what you already decided on!");
+            break;
         case op_num_string:
-            printf("You can't add/substract/divide/multiply/modulate a numeric type and a string.");
+            printf("You can't do any kind of operations (including affectation) between a numeric type and a string.");
             break;
     }
     printf(" ###\n");
     exit(EXIT_FAILURE);
 }
+
+
+
+
+
+
