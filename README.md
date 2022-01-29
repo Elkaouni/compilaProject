@@ -201,11 +201,12 @@ A|..|Z|a|..|z
 1.	Toutes les déclarations dans CONSTS, NUMS and STRINGS
 2.	Les arguments de la fonctions main sont considéré comme déjà déclaré sans valeur initiale. Ils sont soit de type num, soit de type string.
 3.	Une constante doit être soit de type num ou string. 
-4.	PAS DE DOUBLE DECLARATIONS 
-5.	Apres BEGIN, tous les symboles doivent être déjà déclarés 
-6.	Le traitement doit se faire à l’intérieur de la fonction main.
-7.	Il est nécessaire de préciser le type du retour de la fonction main ; num, string ou NULL. Si la fonction ne retourne rien, utiliser NULL.
-8.	Les commentaires ne doivent pas être interprétés.
-9.	Un commentaire peut être écrit n’importe où.
-10.	On peut pas faire des opérations entre un string et un entier.
-11.	Si la fonction ne retourne rien, on peut diectement utiliser **return;**
+4.	Une constante ne peut pas changer de valeur.
+5.	PAS DE DOUBLE DECLARATIONS 
+6.	Apres BEGIN, tous les symboles doivent être déjà déclarés 
+7.	Le traitement doit se faire à l’intérieur de la fonction main.
+8.	Il est nécessaire de préciser le type du retour de la fonction main ; num, string ou NULL. Si la fonction ne retourne rien, utiliser NULL.
+9.	Les commentaires ne doivent pas être interprétés.
+10.	Un commentaire peut être écrit n’importe où.
+11.	On peut pas faire des opérations entre un string et un entier.
+12.	Si la fonction ne retourne rien, on peut diectement utiliser **return;**
