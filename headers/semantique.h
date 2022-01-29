@@ -15,7 +15,8 @@ typedef enum {
 typedef struct {
     char NOM[20];
     TSYM TIDF;
-    float value;
+    float i_value; //if value is numeric
+    char value[100]; //if value is a string
 } T_TAB_IDF;
 
 
