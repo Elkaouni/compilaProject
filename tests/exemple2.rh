@@ -1,0 +1,12 @@
+/*exemple 2*/
+main(string test):num{
+    num i;
+    /*You can comment anywhere*/
+    begin
+        test = "this is a test";
+        for i in 0:10 asc
+        {
+            print(test);
+        }
+    return 0;
+}

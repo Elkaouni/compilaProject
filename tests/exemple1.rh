@@ -1,0 +1,13 @@
+/*exemple 1*/
+main():NULL{
+    /*this is
+    a comment.*/
+    const num x=2, string y="hi ";
+    num z;
+    begin
+        scan(z);
+        x=x+z;
+        print(y,x);
+    return;
+}
+

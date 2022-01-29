@@ -1,0 +1,14 @@
+/*exemple 3*/
+main(num test):NULL{
+/*Take
+as
+much space as
+needed*/
+    begin
+        test = 10;
+        while(true)
+        {
+            print(test);
+        }
+    return NULL;
+}
