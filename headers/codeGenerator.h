@@ -119,7 +119,7 @@ void SaveInstToFile(FILE *file_sortie,int INST, int val)
 /* change path according to whre you want to save*/
 void SavePCodeToFile(FILE *file_sortie) {
     int i;
-    char *path = "C:\\Users\\user\\Desktop\\2A Ensias\\S3\\Projets\\compilateur\\compilateur\\result.rh";
+    char*path=".\\test_result.rh";
     file_sortie=fopen(path, "w+" );
     if(file_sortie == NULL){
         printf("File not found.\n");
