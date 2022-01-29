@@ -1,11 +1,12 @@
 /*exemple 1*/
-main(num number):NULL{
-    /*this is a comment*/
-    const num x=2, string titi="hihi";
-    num toto;
+main(num dd):num{
+/*this is an exemple*/
+    const num x1=2, string name="toto";
     string y;
     begin
-        x=11%2;
-        print("this is "+"exemple ", 1);
-    return;
+        dd= 10+x1;
+        y = "Hi "+name;
+        print(dd,".", y);
+    return dd;
 }
+
