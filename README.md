@@ -2,6 +2,7 @@
 (lexer and parser done. Next is semantic analysis and code generator.)
 Dans le cadre du projet de compilation de S3, nous avons décider de proposer un nouveau language inspiré de Pascal, C et Java. C'est un language assez simple vue le temps alloué au projet. Ci-dessous notre grammaire.
 
+# Grammaire du language PasC-mini
 ## 1.1. Les types existants
 - Const
 - Num (numeric)
@@ -116,29 +117,33 @@ return [ ID | NUM | NULL | eps ];```
 ```
 INSTS() | AFFEC |IF |WHILE |DO_WHILE |FOR | SCAN |PRINT |eps```
 ```
-#### AFFEC done
+#### AFFEC 
 ```
-ID = EXPR() ;
+ID = EXPR() | CONCAT() ;
 ```
-#### IF done
+#### CONCAT 
+```
+STRING + STRING ;
+```
+#### IF 
 ```
 If ( COND() ) { INST() ; }
 [ else { INST () ; } |ELIF() ]
 ```
-#### ELIF() done
+#### ELIF()
 ```
 elif ( COND() ) { INST() }
 [ else { INST();} |ELIF() ]
 ```
-#### WHILE done
+#### WHILE
 ```
 while( COND){ INST() } ;
 ```
-#### DO_WHILE done
+#### DO_WHILE
 ```
 do{ INST ()} while(COND() ) ;
 ```
-#### FOR done
+#### FOR
 ```
 for ID in EXPR : EXPR [desc | asc]  { INST (); }
 ```
@@ -146,34 +151,34 @@ for ID in EXPR : EXPR [desc | asc]  { INST (); }
 ```
 scan( id [ , id]) ;
 ```
-#### PRINT done
+#### PRINT 
 ```
-print(EXPR [,EXPR])
+print(EXPR|CONCAT [,EXPR|CONCAT])
 ```
-#### COND done (true false)	
+#### COND
 ```
 EXPR RELOP EXPR | true | false
 ```
-#### RELOP done
+#### RELOP 
 ```== | != | < |<= | > | >=
 ```
-#### EXPR done
+#### EXPR 
 ```
 TERM [ ADDOP TERM]
 ```
-#### ADOPP done
+#### ADOPP 
 ```
 + | -
 ```
-#### TERM done
+#### TERM 
 ```
 FACT [ MULOP FACT]
 ```
-#### MULOP done
+#### MULOP 
 ```
 * | / | %
 ```
-#### FACT done
+#### FACT 
 ```
 ID | NUM | (EXPR)```
 ```
@@ -181,7 +186,7 @@ ID | NUM | (EXPR)```
 ```
 Letter [letter|number ]
 ```
-#### NUM (include negative numbers)
+#### NUM 
 ```
 [ - ] Number [number ]
 ```
@@ -201,12 +206,29 @@ A|..|Z|a|..|z
 1.	Toutes les déclarations dans CONSTS, NUMS and STRINGS
 2.	Les arguments de la fonctions main sont considéré comme déjà déclaré sans valeur initiale. Ils sont soit de type num, soit de type string.
 3.	Une constante doit être soit de type num ou string. 
-4.	Une constante ne peut pas changer de valeur.
-5.	PAS DE DOUBLE DECLARATIONS 
-6.	Apres BEGIN, tous les symboles doivent être déjà déclarés 
-7.	Le traitement doit se faire à l’intérieur de la fonction main.
-8.	Il est nécessaire de préciser le type du retour de la fonction main ; num, string ou NULL. Si la fonction ne retourne rien, utiliser NULL.
-9.	Les commentaires ne doivent pas être interprétés.
-10.	Un commentaire peut être écrit n’importe où.
-11.	On peut pas faire des opérations entre un string et un entier.
-12.	Si la fonction ne retourne rien, on peut diectement utiliser **return;**
+4.	Il est possible de concatener deux strings. (la taille maximale des strings est fixé est 100 pour ce petit compilateur)
+5.	Une constante ne peut pas changer de valeur.
+6.	PAS DE DOUBLE DECLARATIONS 
+7.	Apres BEGIN, tous les symboles doivent être déjà déclarés 
+8.	Le traitement doit se faire à l’intérieur de la fonction main.
+9.	Il est nécessaire de préciser le type du retour de la fonction main ; num, string ou NULL. Si la fonction ne retourne rien, utiliser NULL.
+10.	Les commentaires ne doivent pas être interprétés.
+11.	Un commentaire peut être écrit n’importe où.
+12.	On peut pas faire des opérations entre un string et un entier.
+13.	Si la fonction ne retourne rien, on peut diectement utiliser **return;**
+14.	Pour les conditions, **true** et **false** sont équivalent à **1** et **0** resp.
+
+# 2. Génération du code
+Ci dessous les instrcutions pour la génération du p-code:
+*ADD, SUB, MUL, DIV, MOD, CCT,
+    EQL, NEQ, GTR, LSS, GEQ, LEQ,
+    PRN,
+    INN,
+    INT,
+    LDI,
+    LDA,
+    LDV,
+    STO,
+    BRN,
+    BZE,
+    HLT*
