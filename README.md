@@ -77,8 +77,7 @@ a~z	A~Z  =	+	-	*	/	%	{}	<>	()	,	;	:
 ### 1.1.2. Les non-terminaux
 #### Fonstion main
 Il s’agit de la fonction principale. Tout traitement ou commentaire doit se faire à l’intérieur du main.
-```main ( <args> ) : <type_retour > { <declarations> <insts> }
-```
+On précise le type de retour numerique (num), un string ou rien (null).
 La fonction main:
 ```
 Main ( [type arg [, type arg}] ) : [ num| string | NULL] {
