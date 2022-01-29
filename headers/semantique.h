@@ -1,4 +1,4 @@
-typedef struct
+    typedef struct
 {
     int code; //token
     char nom[20];
@@ -6,7 +6,7 @@ typedef struct
 
 typedef enum {
     TCONSTNUM,
-    TCONTSTRING,
+    TCONSTSTRING,
     TNUM,
     TSTRING,
     TNULL
@@ -64,55 +64,7 @@ int isConstAFF(sym symbole, T_TAB_IDF* TAB_IDFS, int sizeTAB)
                 }
             case TNULL:
             case TCONSTNUM:
-            case TCONSTSTRIN:
-            default:
-                {
-                    return 0;
-                }
-            }
-        }
-    }
-    return 0;
-}
-
-int isNumericType(sym symbole, T_TAB_IDF* TAB_IDFS, int sizeTAB)
-{
-    int i=0;
-    for(i=0; i<sizeTAB; i++)
-    {
-        if(strcmp(symbole.nom,TAB_IDFS[i].NOM)== 0)
-        {
-            switch(TAB_IDFS[i].TIDF)
-            {
-            case TNUM:
-            case TCONSTNUM:
-                {
-                    return 1;
-                }
-            default:
-                {
-                    return 0;
-                }
-            }
-        }
-    }
-    return 0;
-}
-
-int isStringType(sym symbole, T_TAB_IDF* TAB_IDFS, int sizeTAB)
-{
-    int i=0;
-    for(i=0; i<sizeTAB; i++)
-    {
-        if(strcmp(symbole.nom,TAB_IDFS[i].NOM)== 0)
-        {
-            switch(TAB_IDFS[i].TIDF)
-            {
-            case TSTRING:
             case TCONSTSTRING:
-                {
-                    return 1;
-                }
             default:
                 {
                     return 0;
