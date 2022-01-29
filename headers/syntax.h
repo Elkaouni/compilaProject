@@ -9,6 +9,7 @@ void STRINGS();
 void INSTS();
 void INST();
 void AFFECT();
+void CONCAT();
 void IF();
 void ELIF();
 void WHILE();
