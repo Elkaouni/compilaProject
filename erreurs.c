@@ -44,6 +44,9 @@ void Erreur_sem(int cod)
         case div_zero:
             printf("You tried to divide by zero!");
             break;
+        case mod_notInt:
+            printf("Invalid operand %: You have a float!");
+            break;
         case op_num_string:
             printf("You can't add/substract/divide/multiply/modulate a numeric type and a string.");
             break;
@@ -51,9 +54,3 @@ void Erreur_sem(int cod)
     printf(" ###\n");
     exit(EXIT_FAILURE);
 }
-
-
-
-
-
-
