@@ -1,0 +1,60 @@
+# depslib dependency file v1.0
+1643458893 source:c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\analyseur_lexical.c
+	<stdio.h>
+	<stdlib.h>
+	"headers/syntax.h"
+	"headers/file.h"
+	<ctype.h>
+	<string.h>
+
+1642773804 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\syntax.h
+	"lexer.h"
+	"erreurs.h"
+
+1642617006 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\lexer.h
+	"tokens.h"
+
+1643408104 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\tokens.h
+
+1643408115 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\erreurs.h
+
+1642616992 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\file.h
+	<stdio.h>
+
+1643462552 source:c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\analyseur_syntax.c
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	<errno.h>
+	"headers/syntax.h"
+	"headers/file.h"
+	"headers/codeGenerator.h"
+	"headers/semantique.h"
+
+1643408690 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\codegenerator.h
+
+1642617016 c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\headers\semantique.h
+
+1643460350 source:c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\erreurs.c
+	<stdlib.h>
+	<stdio.h>
+	"headers/erreurs.h"
+
+1642617149 source:c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\interpreteur.c
+	<stdio.h>
+	<stdlib.h>
+	"headers/syntax.h"
+	"headers/file.h"
+	<ctype.h>
+	<string.h>
+
+1643462373 source:c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\main.c
+	<stdio.h>
+	<stdlib.h>
+	"headers/syntax.h"
+	"headers/file.h"
+
+1642616205 source:c:\users\user\desktop\2a ensias\s3\projets\compilateur\compilateur\tokens.c
+	<stdlib.h>
+	"headers/tokens.h"
+
