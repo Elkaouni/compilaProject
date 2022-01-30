@@ -69,8 +69,6 @@ void ajouter_i_val(float val, sym symbole)
     printf("ajouter_i_val: not found.\n");
 }
 
-
-
 /*************************************/
 /** semantic verification functions **/
 /*************************************/
@@ -213,6 +211,42 @@ int init_lexer_token_list(sym* list_source, int size_source)
 }
 
 
+/*************************************
+   Using and Getting an ID's value from the table
+*************************************/
+char gs_value[100];
+float gi_value;
+void set_i_value(float val)
+{
+    gi_value = val;
+}
+void set_value(char *val)
+{
+    strcpy(gs_value, val);
+}
+void get_value_id(sym symbole)
+{
+    for(int i=0; i<index; i++)
+    {
+        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
+        {
+            if(TAB_IDFS[i].TIDF == TCONSTSTRING || TAB_IDFS[i].TIDF == TSTRING)
+                strcpy(gs_value,TAB_IDFS[i].value);
+        }
+    }
+}
+
+void get_i_value_id(sym symbole)
+{
+    for(int i=0; i<index; i++)
+    {
+        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
+        {
+            if(TAB_IDFS[i].TIDF == TCONSTNUM || TAB_IDFS[i].TIDF == TNUM)
+                set_i_value(TAB_IDFS[i].i_value);
+        }
+    }
+}
 
 /**********************************
          Starting Parser
@@ -245,16 +279,6 @@ void printLexer()
 }
 
 
-char gs_value[100];
-float gi_value;
-void set_i_value(float val)
-{
-    gi_value = val;
-}
-void set_value(char *val)
-{
-    strcpy(gs_value, val);
-}
 void Test_Symbole (int token, int COD_ERR)
 {
    while(sym_cour.code == COMM_TOKEN)
@@ -281,7 +305,7 @@ void Test_Symbole (int token, int COD_ERR)
             strcpy(gs_value, sym_cour.nom);
         }
 
-        printf("Done with nom->%s  code->%s\n", sym_cour.nom, token_names[sym_cour.code]);
+        //printf("Done with nom->%s  code->%s\n", sym_cour.nom, token_names[sym_cour.code]);
         do{
             Sym_suiv();
         }while(sym_cour.code == COMM_TOKEN);
@@ -328,6 +352,10 @@ void addID()
 
 void MAIN()
 {
+    /**Main ( [type arg [, type arg}] ) : [ num| string | NULL] {
+        DECLARATIONS() ;
+        INSTS() ;
+        }**/
     Test_Symbole(MAIN_TOKEN, ERR_MAIN);
     Test_Symbole(PO_TOKEN, ERR_PO);
     int args;
@@ -410,6 +438,11 @@ void MAIN()
 
 void DECLARE()
 {
+     /**
+	CONSTS() ;
+	NUMERIC() ;
+	STRINGS() ;
+**/
      CONSTS();
      NUMERIC();
      STRINGS();
@@ -417,6 +450,7 @@ void DECLARE()
 
 void CONSTS()
 {
+    /**const type ID= VAL [, type ID=VAL] ; | eps**/
     switch(sym_cour.code)
     {
         case CONST_TOKEN:
@@ -510,6 +544,7 @@ void CONSTS()
 
 void NUMERIC()
 {
+    /**num ID [, ID ] ; | eps**/
     switch(sym_cour.code)
     {
         case TYNUM_TOKEN:
@@ -548,6 +583,7 @@ void NUMERIC()
 
 void STRINGS()
 {
+    /**string ID [, ID ] ; |eps**/
     switch(sym_cour.code)
     {
         case TYSTRING_TOKEN:
@@ -587,6 +623,9 @@ void STRINGS()
 
 void INSTS()
 {
+    /** begin
+    INST() { ; INST()}
+    return [ ID | NUM | NULL | eps ];``**/
     Test_Symbole(BEGIN_TOKEN,ERR_BEGIN);
     INST();
     while(sym_cour.code == PV_TOKEN)
@@ -602,7 +641,17 @@ void INSTS()
             Erreur_sem(not_declared);
         if(!IDmatchMainReturnType(sym_cour))
             Erreur_sem(return_type);
-        printf("\nFunction returned: %s = value\n", sym_cour.nom);
+        if(isStringType(sym_cour))
+        {
+            get_value_id(sym_cour);
+            printf("\nFunction returned: %s = %s\n", sym_cour.nom, gs_value);
+        }
+        else
+        {
+            get_i_value_id(sym_cour);
+            printf("\nFunction returned: %s = %.2f\n", sym_cour.nom, gi_value);
+        }
+
         Sym_suiv();
     }
     else if(sym_cour.code == NUM_TOKEN){
@@ -645,6 +694,8 @@ void INSTS()
 
 void IF()
 {
+    /** If ( COND() ) { INST() ; }
+    [ else { INST () ; } | ELIF() ]***/
     Test_Symbole(IF_TOKEN,ERR_IF);
     Test_Symbole(PO_TOKEN,ERR_PO);
     COND();
@@ -668,6 +719,8 @@ void IF()
 
 void ELIF()
 {
+    /**elif ( COND() ) { INST() }
+    [ else { INST();} |ELIF() ]**/
     Test_Symbole(ELIF_TOKEN, ERR_ELIF);
     Test_Symbole(PO_TOKEN,ERR_PO);
     COND();
@@ -691,6 +744,7 @@ void ELIF()
 
 void AFFECT()
 {
+    /** ID = EXPR() | CONCAT() ;**/
     Test_Symbole(ID_TOKEN, ERR_ID);
     if(!ExistInTab(sym_IDprec))
         Erreur_sem(not_declared);
@@ -716,6 +770,7 @@ void AFFECT()
 
 void WHILE()
 {
+    /** while( COND){ INST() } ;**/
     Test_Symbole(WHILE_TOKEN,ERR_WHILE);
     Test_Symbole(PO_TOKEN, ERR_PO);
     COND();
@@ -728,6 +783,7 @@ void WHILE()
 
 void DO_WHILE()
 {
+    /**do{ INST ()} while(COND() ) ;**/
     Test_Symbole(DO_TOKEN,ERR_DO);
     Test_Symbole(AO_TOKEN, ERR_AO);
     INST();
@@ -741,6 +797,7 @@ void DO_WHILE()
 
 void COND()
 {
+    /**EXPR RELOP EXPR | true | false**/
     int op, c_token;
     switch(sym_cour.code)
     {
@@ -804,6 +861,7 @@ void COND()
 
 void INST()
 {
+    /**INSTS() | AFFEC |IF |WHILE |DO_WHILE |FOR | SCAN |PRINT |eps**/
     switch(sym_cour.code)
     {
         case BEGIN_TOKEN:
@@ -859,6 +917,7 @@ void INST()
 
 void EXPR()
 {
+    /**TERM [ ADDOP TERM]**/
     int op;
     float val1=0;
     TERM();
@@ -888,7 +947,7 @@ void EXPR()
 
 void CONCAT()
 {
-    /** words  + words **/
+    /** words()  + words() **/
     int op;
     char phrase1[100];
     //Test_Symbole(STRING_TOKEN, ERR_STRING);
@@ -904,19 +963,10 @@ void CONCAT()
     strcpy(gs_value, phrase1);
 }
 
-void get_value_id(sym symbole)
-{
-    for(int i=0; i<index; i++)
-    {
-        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
-        {
-            if(TAB_IDFS[i].TIDF == TCONSTSTRING || TAB_IDFS[i].TIDF == TSTRING)
-                strcpy(gs_value,TAB_IDFS[i].value);
-        }
-    }
-}
+
 void WORDS()
 {
+    /**ID | STRING **/
     switch(sym_cour.code)
     {
         case ID_TOKEN:
@@ -941,6 +991,7 @@ void WORDS()
 
 void TERM()
 {
+    /**FACT [ MULOP FACT]**/
     int op;
     float valeur=0;
     FACT();
@@ -976,20 +1027,9 @@ void TERM()
     set_i_value(valeur);
 }
 
-void get_i_value_id(sym symbole)
-{
-    for(int i=0; i<index; i++)
-    {
-        if(strcmp(symbole.nom, TAB_IDFS[i].NOM)==0)
-        {
-            if(TAB_IDFS[i].TIDF == TCONSTNUM || TAB_IDFS[i].TIDF == TNUM)
-                set_i_value(TAB_IDFS[i].i_value);
-        }
-    }
-}
-
 void FACT()
 {
+    /**ID | NUM | (EXPR)**/
     switch(sym_cour.code)
     {
         case ID_TOKEN:
@@ -1022,6 +1062,7 @@ void FACT()
 
 void FOR()
 {
+    /**for ID in EXPR : EXPR [desc | asc]  { INST (); }**/
     Test_Symbole(FOR_TOKEN, ERR_FOR);
     Test_Symbole(ID_TOKEN, ERR_ID);
     if(!ExistInTab(sym_IDprec))
@@ -1055,6 +1096,7 @@ void FOR()
 
 void SCAN()
 {
+     /**scan( id [ , id]) ;**/
      Test_Symbole(SCAN_TOKEN, ERR_SCAN);
      Test_Symbole(PO_TOKEN, ERR_PO);
      Test_Symbole(ID_TOKEN, ERR_ID);
@@ -1079,6 +1121,7 @@ void SCAN()
 
 void PRINT()
 {
+     /**print(EXPR|CONCAT [,EXPR|CONCAT])**/
      Test_Symbole(PRINT_TOKEN, ERR_PRINT);
      Test_Symbole(PO_TOKEN, ERR_PO);
      if(sym_cour.code == STRING_TOKEN)
@@ -1097,4 +1140,5 @@ void PRINT()
      if(sym_cour.code != PV_TOKEN)
         Erreur(ERR_PV);
 }
+
 
