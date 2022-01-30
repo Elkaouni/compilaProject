@@ -22,8 +22,6 @@ Dans le cadre du projet de compilation de S3, nous avons décider de proposer un
  | string | TYSTRING_TOKEN | 
  | NULL | NULL_TOKEN | 
  | main | MAIN_TOKEN | 
- | declare | DEC_TOKEN | 
- | end_dec | END_TOKEN | 
  | begin | BEGING_TOKEN | 
  | return | RET_TOKEN_TOKEN | 
  | if | IF_TOKEN_TOKEN | 
@@ -89,11 +87,11 @@ INSTS() ;
   
 #### DECLARATIONS() 
 ```
-declare
+
 	CONSTS() ;
 	NUMERIC() ;
 	STRINGS() ;
-End_dec
+
 ```
 #### CONSTS()
 ```
