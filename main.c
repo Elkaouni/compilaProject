@@ -20,14 +20,24 @@ int tailleList = 0;
 void saveTokenInList(Token* token)
 {
     symbole.code = token->type;
+    //printf("Saving: %s ...\n", token->value);
     strcpy(symbole.nom,token->value);
     list[tailleList]= symbole;
     tailleList++;
 }
 
+int start =0;
 void AfficherToken(Token* token)
 {
-    printf(" %s          %s \n________________\n", token->value, token_names[token->type]);
+    if(!start)
+		{
+		    printf("\n#######################          #####################\n");
+		      printf("##   Mots/Symboles   ##          ##      Token      ##\n");
+		      printf("#######################          #####################\n");
+		    start++;
+		}
+    printf(" %s\t\t\t\t%s\n", token->value, token_names[token->type]);
+    printf("________________________________________________________________\n");
 }
 
 void printList()
@@ -66,7 +76,7 @@ int main(int argc, char *argv[])
 	while (!feof(file))
 	{
 		Token *token = Symb_suiv();
-		//AfficherToken(token);
+		AfficherToken(token);
 		saveTokenInList(token);
 	}
 	if(!init_lexer_token_list(list, tailleList))
