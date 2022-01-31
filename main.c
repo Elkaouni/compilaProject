@@ -63,12 +63,14 @@ int main(int argc, char *argv[])
 	if (argc != 2)
 	{
 		printf("You didn't choose any file. Please try again and don't forget to choose one.\n");
+		getchar();
 		exit(1);
 	}
 
 	if ((file = fopen(argv[1], "r")) == NULL)
 	{
 		printf("ERROR! Could not open the file.\n");
+		getchar();
 		exit(1);
 	}
 
@@ -100,5 +102,6 @@ int main(int argc, char *argv[])
     printf("           #  Compiler is shutting down  #\n");
     printf("           ############################### \n");
 
+    getchar();
 	return 1;
 }
