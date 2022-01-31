@@ -195,7 +195,7 @@ Letter [letter|number ]
 ```
 #### NUM 
 ```
-[ - ] Number [number ]
+Number [number ]
 ```
 
 #### NUMBER
