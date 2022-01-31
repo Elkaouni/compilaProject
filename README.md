@@ -84,6 +84,10 @@ DECLARATIONS() ;
 INSTS() ;
 }
 ```
+#### type
+```
+num | string
+```
   
 #### DECLARATIONS() 
 ```
