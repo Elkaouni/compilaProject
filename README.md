@@ -153,7 +153,7 @@ do{ INST ()} while(COND() ) ;
 ```
 for ID in EXPR : EXPR [desc | asc]  { INST (); }
 ```
-#### SCAN done
+#### SCAN
 ```
 scan( id [ , id]) ;
 ```
@@ -166,7 +166,8 @@ print(EXPR|CONCAT [,EXPR|CONCAT])
 EXPR RELOP EXPR | true | false
 ```
 #### RELOP 
-```== | != | < |<= | > | >=
+```
+== | != | < |<= | > | >=
 ```
 #### EXPR 
 ```
