@@ -79,11 +79,16 @@ Il s’agit de la fonction principale. Tout traitement ou commentaire doit se fa
 On précise le type de retour numerique (num), un string ou rien (null).
 La fonction main:
 ```
-Main ( [type ID [, type ID}] ) : [ num| string | NULL] {
+Main ( [type ID [, type ID]] ) : TYPE_RETOUR {
 DECLARATIONS() ;
 INSTS() ;
 }
 ```
+#### TYPE_RETOUR
+```
+num| string | NULL
+```
+
 #### type
 ```
 num | string
