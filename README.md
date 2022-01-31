@@ -208,8 +208,13 @@ Number [number ]
 ```
 #### STRING 
 ```
-" [ID | NUM ]* "
+" MOTS[MOTS] "
 ```
+#### MOTS 
+```
+number | letter 
+```
+
 
 #### NUMBER
 ```
