@@ -106,6 +106,10 @@ num | string
 ```
 const type ID= VAL [, type ID=VAL] ; | eps
 ```
+#### VAL
+```
+NUM | STRING
+```
 #### NUMERIC()
 ```
 num ID [, ID ] ; | eps
@@ -196,11 +200,15 @@ ID | NUM | (EXPR)```
 ```
 #### ID
 ```
-Letter [letter|number ]
+Letter [letter|number ]*
 ```
 #### NUM 
 ```
 Number [number ]
+```
+#### STRING 
+```
+" [ID | NUM ]* "
 ```
 
 #### NUMBER
